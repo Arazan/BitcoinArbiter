@@ -1,0 +1,143 @@
+<div class="oj-flex">
+    <div class="oj-flex-item oj-margin" style="min-width: 100%">
+        <label for="fetchSize">Fetch Size</label> 
+        <input id="fetchSize"
+               data-bind="ojComponent: {
+        component: 'ojInputNumber', 
+        max:25,
+        min:1, 
+        step:1, 
+        value:fetchSize}"/>     
+        
+        <button id= "getData"
+                data-bind="click: getDataClick, 
+                       ojComponent: { component: 'ojButton', label: 'GetData' }">
+        </button>      
+        <span>1 USD =</span>
+        <span id="curr-value" data-bind="text: usdTOmxnExchange"></span>
+        <span>MXN</span>
+    </div>
+    <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
+        <h3 class="oj-header-border">Bitso (MXN)</h3>
+        <div class="oj-flex oj-sm-justify-content-center">
+            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+                <h3>BTC Asks</h3>
+                <table cña data-bind="ojComponent: {
+    component: 'ojTable', 
+        data: BitsoOBAsksDataSource,
+        columns: [            
+            {headerText: 'Price', field: 'price'},
+            {headerText: 'Amount', field: 'amount'},
+            {headerText: 'Total', field: 'total'}
+        ]}">
+                </table>
+            </div>
+
+            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+                <h3>BTC Bids</h3>
+                <table data-bind="ojComponent: {
+    component: 'ojTable', 
+        data: BitsoOBBidsDataSource,
+        columns: [            
+            {headerText: 'Price', field: 'price'},
+            {headerText: 'Amount', field: 'amount'},
+            {headerText: 'Total', field: 'total'}
+        ]}">
+                </table>        
+            </div>
+        </div>
+    </div>
+    <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
+        <h3 class="oj-header-border">Bitfinex (USD)</h3>
+        <div class="oj-flex oj-sm-justify-content-center">
+            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+                <h3>BTC Asks</h3>
+                <table cña data-bind="ojComponent: {
+    component: 'ojTable', 
+        data: BitfinexOBAsksDataSource,
+        columns: [
+            {headerText: 'Price', field: 'price'},
+            {headerText: 'Amount', field: 'amount'},
+            {headerText: 'Total', field: 'total'}
+        ]}">
+                </table>
+            </div>
+
+            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+                <h3>BTC Bids</h3>
+                <table data-bind="ojComponent: {
+    component: 'ojTable', 
+        data: BitfinexOBBidsDataSource,
+        columns: [
+            {headerText: 'Price', field: 'price'},
+            {headerText: 'Amount', field: 'amount'},
+            {headerText: 'Total', field: 'total'}
+        ]}">
+                </table>        
+            </div>
+        </div>
+    </div>    
+
+
+    <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
+        <h3 class="oj-header-border">Bitso (MXN)</h3>
+        <div class="oj-flex oj-sm-justify-content-center">
+            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+                <h3>ETH Asks</h3>
+                <table cña data-bind="ojComponent: {
+    component: 'ojTable', 
+        data: BitsoETHAsksDataSource,
+        columns: [
+            {headerText: 'Price', field: 'price'},
+            {headerText: 'Amount', field: 'amount'},
+            {headerText: 'Total', field: 'total'}
+        ]}">
+                </table>
+            </div>
+
+            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+                <h3>ETH Bids</h3>
+                <table data-bind="ojComponent: {
+    component: 'ojTable', 
+        data: BitsoETHBidsDataSource,
+        columns: [
+            {headerText: 'Price', field: 'price'},
+            {headerText: 'Amount', field: 'amount'},
+            {headerText: 'Total', field: 'total'}
+        ]}">
+                </table>        
+            </div>
+        </div>
+    </div>
+    <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
+        <h3 class="oj-header-border">Bitfinex (USD)</h3>
+        <div class="oj-flex oj-sm-justify-content-center">
+            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+                <h3>ETH Asks</h3>
+                <table cña data-bind="ojComponent: {
+    component: 'ojTable', 
+        data: BitfinexETHAsksDataSource,
+        columns: [            
+            {headerText: 'Price', field: 'price'},
+            {headerText: 'Amount', field: 'amount'},
+            {headerText: 'Total', field: 'total'}
+        ]}">
+                </table>
+            </div>
+
+            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+                <h3>ETH Bids</h3>
+                <table data-bind="ojComponent: {
+    component: 'ojTable', 
+        data: BitfinexETHBidsDataSource,
+        columns: [
+            {headerText: 'Price', field: 'price'},
+            {headerText: 'Amount', field: 'amount'},
+            {headerText: 'Total', field: 'total'}
+        ]}">
+                </table>        
+            </div>
+        </div>
+    </div>     
+
+</div>
