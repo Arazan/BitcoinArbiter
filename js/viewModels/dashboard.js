@@ -12,7 +12,7 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
             function DashboardViewModel() {
                 var self = this;
 
-                self.fetchSize = ko.observable(5);
+                self.fetchSize = ko.observable(10);
                 self.usdTOmxnExchange = ko.observable();
                 self.refreshRate = 5;
                                             
@@ -37,10 +37,11 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
                 self.BitfinexETHOrderBookAsks = ko.observableArray();
                 self.BitfinexETHOrderBookBids = ko.observableArray();    
                 
-                self.BitsoBTCOrderBookURL = 'https://api-dev.bitso.com/v3/order_book/?book=btc_mxn';
-                self.BitsoETHOrderBookURL = 'https://api-dev.bitso.com/v3/order_book/?book=eth_mxn';
+                self.BitsoBTCOrderBookURL = 'https://api.bitso.com/v3/order_book/?book=btc_mxn';
+                self.BitsoETHOrderBookURL = 'https://api.bitso.com/v3/order_book/?book=eth_mxn';
                 self.BFBTCOrderBookURL = 'https://api.bitfinex.com/v1/book/BTCUSD/?limit_bids=';
-                self.BFETHCOrderBookURL = 'https://api.bitfinex.com/v1/book/ETHUSD/?limit_bids=';
+                self.BFETHCOrderBookURL = 'https://api.bitfinex.com/v2/book/ETHUSD/?limit_bids=';
+                self.BFETHBTCCOrderBookURL = 'https://api.bitfinex.com/v2/book/ETHBTC/?limit_bids=';
                 self.ExchangeRareURL = 'http://api.fixer.io/latest?base=USD&symbols=MXN';
 
                 /**
@@ -284,6 +285,30 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
                     self.BitfinexETHAsksDataSource = new oj.ArrayTableDataSource(self.BitfinexETHOrderBookAsks, {idAttribute: 'id'});
                     self.BitfinexETHBidsDataSource = new oj.ArrayTableDataSource(self.BitfinexETHOrderBookBids, {idAttribute: 'id'});
                 };     
+                
+                self.getBitfinexETHBTCPrice = function () {
+                    $.ajax({
+                        cache: false,
+                        url: self.BFETHBTCCOrderBookURL+self.fetchSize()+'&limit_asks='+self.fetchSize(),
+                        dataType: "json",
+                        success: function (orderBook) {
+                            var ids = 0;
+                                                    
+
+                            $.each(orderBook.asks, function () {
+                                self.BitfinexETHOrderBookAsks.push({
+                                    id: ids += 1,
+                                    amount: parseFloat(this.amount).toFixed(4),
+                                    price: "$" + this.price,
+                                    total: parseFloat(this.price * this.amount).toFixed(2)
+                                });
+                                if (ids >= self.fetchSize())
+                                    return false;
+                            });
+                        }
+                    });
+
+                };                 
                 
                 self.getExchangeRate = function(){
                     $.ajax({
