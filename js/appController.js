@@ -21,25 +21,16 @@ define(['ojs/ojcore', 'knockout', 'ojs/ojrouter', 'ojs/ojknockout', 'ojs/ojarray
                 self.router = oj.Router.rootInstance;
                 self.router.configure({
                     'ticker': {label: 'Ticker', isDefault: true},
-                    'dashboard': {label: 'Dashboard'},
-                    'incidents': {label: 'Incidents'},
-                    'customers': {label: 'Customers'},
-                    'about': {label: 'About'}
+                    'orderBook': {label: 'Order Book'}
                 });
                 oj.Router.defaults['urlAdapter'] = new oj.Router.urlParamAdapter();
 
                 // Navigation setup
                 var navData = [
                     {name: 'Ticker', id: 'ticker',
-                        iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 demo-chart-icon-24'},
-                    {name: 'Dashboard', id: 'dashboard',
-                        iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 demo-chart-icon-24'},
-                    {name: 'Incidents', id: 'incidents',
                         iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 demo-fire-icon-24'},
-                    {name: 'Customers', id: 'customers',
-                        iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 demo-people-icon-24'},
-                    {name: 'About', id: 'about',
-                        iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 demo-info-icon-24'}
+                    {name: 'OrderBook', id: 'orderBook',
+                        iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 demo-catalog-icon-24'}
                 ];
                 self.navDataSource = new oj.ArrayTableDataSource(navData, {idAttribute: 'id'});
 
@@ -64,9 +55,7 @@ define(['ojs/ojcore', 'knockout', 'ojs/ojrouter', 'ojs/ojknockout', 'ojs/ojarray
 
                 // Header
                 // Application Name used in Branding Area
-                self.appName = ko.observable("App Name");
-                // User Info used in Global Navigation area
-                self.userLogin = ko.observable("john.hancock@oracle.com");
+                self.appName = ko.observable("Bitcoin Arbiter");
 
                 // Footer
                 function footerLink(name, id, linkTarget) {
@@ -75,11 +64,8 @@ define(['ojs/ojcore', 'knockout', 'ojs/ojrouter', 'ojs/ojknockout', 'ojs/ojarray
                     this.linkTarget = linkTarget;
                 }
                 self.footerLinks = ko.observableArray([
-                    new footerLink('About Oracle', 'aboutOracle', 'http://www.oracle.com/us/corporate/index.html#menu-about'),
-                    new footerLink('Contact Us', 'contactUs', 'http://www.oracle.com/us/corporate/contact/index.html'),
-                    new footerLink('Legal Notices', 'legalNotices', 'http://www.oracle.com/us/legal/index.html'),
-                    new footerLink('Terms Of Use', 'termsOfUse', 'http://www.oracle.com/us/legal/terms/index.html'),
-                    new footerLink('Your Privacy Rights', 'yourPrivacyRights', 'http://www.oracle.com/us/legal/privacy/index.html')
+                    new footerLink('Bitso API', 'bitoAPI', 'https://bitso.com/developers'),
+                    new footerLink('Bitfinex API', 'bitfinexAPI', 'http://docs.bitfinex.com/v1/reference')
                 ]);
             }
 

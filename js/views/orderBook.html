@@ -8,24 +8,19 @@
         min:1, 
         step:1, 
         value:fetchSize}"/>     
-
-        <button id= "getData"
-                data-bind="click: getDataClick, 
-                       ojComponent: { component: 'ojButton', label: 'GetData' }">
-        </button>      
         <span>1 USD =</span>
         <span id="curr-value" data-bind="text: usdTOmxnExchange"></span>
         <span>MXN</span>
     </div>    
     <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
-        <h3 class="oj-header-border">Bitso (MXN)</h3>
+        <h3 class="oj-header-border highlight">Bitso (MXN)</h3>
 
         <div class="oj-flex oj-sm-justify-content-center">
             <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
                 <h3>BTC Bids</h3>
-                <table data-bind="ojComponent: {
+                <table  style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
-        data: BitsoOBBidsDataSource,
+        data: BitsoOBBidsDataSource,        
         columns: [            
             {headerText: 'Price', field: 'price'},
             {headerText: 'Amount', field: 'amount'},
@@ -35,7 +30,7 @@
             </div>
             <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
                 <h3>BTC Asks</h3>
-                <table data-bind="ojComponent: {
+                <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
         data: BitsoOBAsksDataSource,
         columns: [            
@@ -50,11 +45,11 @@
         </div>
     </div>
     <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
-        <h3 class="oj-header-border">Bitfinex (USD)</h3>
+        <h3 class="oj-header-border highlight">Bitfinex (USD)</h3>
         <div class="oj-flex oj-sm-justify-content-center">
             <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
                 <h3>BTC Bids</h3>
-                <table data-bind="ojComponent: {
+                <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
         data: BitfinexOBBidsDataSource,
         columns: [
@@ -67,7 +62,7 @@
 
             <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
                 <h3>BTC Asks</h3>
-                <table data-bind="ojComponent: {
+                <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
         data: BitfinexOBAsksDataSource,
         columns: [
@@ -82,11 +77,11 @@
 
 
     <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
-        <h3 class="oj-header-border">Bitso (MXN)</h3>
+        <h3 class="oj-header-border highlight">Bitso (MXN)</h3>
         <div class="oj-flex oj-sm-justify-content-center">
             <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
                 <h3>ETH Bids</h3>
-                <table data-bind="ojComponent: {
+                <table  style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
         data: BitsoETHBidsDataSource,
         columns: [
@@ -98,7 +93,7 @@
             </div>
             <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
                 <h3>ETH Asks</h3>
-                <table cña data-bind="ojComponent: {
+                <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
         data: BitsoETHAsksDataSource,
         columns: [
@@ -113,11 +108,11 @@
         </div>
     </div>
     <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
-        <h3 class="oj-header-border">Bitfinex (USD)</h3>
+        <h3 class="oj-header-border highlight">Bitfinex (USD)</h3>
         <div class="oj-flex oj-sm-justify-content-center">
             <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
                 <h3>ETH Bids</h3>
-                <table data-bind="ojComponent: {
+                <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
         data: BitfinexETHBidsDataSource,
         columns: [
@@ -129,7 +124,7 @@
             </div>
             <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
                 <h3>ETH Asks</h3>
-                <table cña data-bind="ojComponent: {
+                <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
         data: BitfinexETHAsksDataSource,
         columns: [            

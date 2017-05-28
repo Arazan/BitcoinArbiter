@@ -15,6 +15,8 @@ define(['ojs/ojcore', 'knockout'
     function tickerContentViewModel() {
         var self = this;
 
+
+
         self.bitsoBTClast = ko.observable(0);
         self.bitsoBTCbid = ko.observable(0);
         self.bitsoBTClow = ko.observable(0);
@@ -36,6 +38,17 @@ define(['ojs/ojcore', 'knockout'
         self.bitsoETHspread = ko.pureComputed(function () {
             //console.log()
             return parseFloat((((self.bitsoETHask() / self.bitsoETHbid())) - 1) * 100).toFixed(2);
+        });
+
+        self.bitsoETHBTClast = ko.observable(0);
+        self.bitsoETHBTCbid = ko.observable(0);
+        self.bitsoETHBTClow = ko.observable(0);
+        self.bitsoETHBTCvolume = ko.observable(0);
+        self.bitsoETHBTCask = ko.observable(0);
+        self.bitsoETHBTChigh = ko.observable(0);
+        self.bitsoETHBTCspread = ko.pureComputed(function () {
+            //console.log()
+            return parseFloat((((self.bitsoETHBTCask() / self.bitsoETHBTCbid())) - 1) * 100).toFixed(2);
         });
 
         self.bitfinexBTClast = ko.observable(0);
@@ -61,11 +74,36 @@ define(['ojs/ojcore', 'knockout'
             return parseFloat((((self.bitfinexETHask() / self.bitfinexETHbid())) - 1) * 100).toFixed(2);
         });
 
+        self.bitfinexETHBTClast = ko.observable(0);
+        self.bitfinexETHBTCbid = ko.observable(0);
+        self.bitfinexETHBTClow = ko.observable(0);
+        self.bitfinexETHBTCvolume = ko.observable(0);
+        self.bitfinexETHBTCask = ko.observable(0);
+        self.bitfinexETHBTChigh = ko.observable(0);
+        self.bitfinexETHBTCspread = ko.pureComputed(function () {
+            //console.log()
+            return parseFloat((((self.bitfinexETHBTCask() / self.bitfinexETHBTCbid())) - 1) * 100).toFixed(2);
+        });
+
+
+        self.arbitrage = ko.pureComputed(function () {
+
+            return parseFloat(((self.bitfinexBTCbid() / self.bitfinexETHask()) * self.bitsoETHbid()) - self.bitsoBTCask()).toFixed(2);
+        });
+
+
+        self.arbitrage2 = ko.pureComputed(function () {
+
+            return parseFloat(((1 / self.bitfinexETHBTCask()) * self.bitsoETHbid()) - self.bitsoBTCask()).toFixed(2);
+        });
+
         self.bitsoBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=btc_mxn';
         self.bitsoETHtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_mxn';
+        self.bitsoETHBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_btc';
 
         self.bitfinexBTCtickerURL = 'https://api.bitfinex.com/v1/pubticker/BTCUSD';
         self.bitfinexETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHUSD';
+        self.bitfinexBTCETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHBTC';
 
         self.handleActivated = function (info) {
             self.getData();
@@ -78,9 +116,19 @@ define(['ojs/ojcore', 'knockout'
         self.getData = function () {
             self.getBitsoBTCticker();
             self.getBitsoETHticker();
+            self.getBitsoETHBTCticker();
             self.getBitfinexBTCticker();
             self.getBitfinexETHticker();
+            self.getBitfinexETHBTCticker();
+            
+            setTimeout(function () {
+                console.log("timer");
+                self.getData();
+            }, 12000);            
+
         }
+
+
 
 
         self.getBitsoBTCticker = function () {
@@ -119,6 +167,24 @@ define(['ojs/ojcore', 'knockout'
             });
         }
 
+        self.getBitsoETHBTCticker = function () {
+            $.ajax({
+                cache: false,
+                url: self.bitsoETHBTCtickerURL,
+                dataType: "json",
+                success: function (data) {
+                    var payload = data.payload;
+                    self.bitsoETHBTClast(payload.last);
+                    self.bitsoETHBTCbid(payload.bid);
+                    self.bitsoETHBTClow(payload.low);
+                    self.bitsoETHBTCvolume(parseFloat(payload.volume).toFixed(2));
+                    self.bitsoETHBTCask(payload.ask);
+                    self.bitsoETHBTChigh(payload.high);
+
+                }
+            });
+        }
+
         self.getBitfinexBTCticker = function () {
             $.ajax({
                 cache: false,
@@ -148,6 +214,23 @@ define(['ojs/ojcore', 'knockout'
                     self.bitfinexETHvolume(parseFloat(payload.volume).toFixed(2));
                     self.bitfinexETHask(payload.ask);
                     self.bitfinexETHhigh(payload.high);
+
+                }
+            });
+        }
+
+        self.getBitfinexETHBTCticker = function () {
+            $.ajax({
+                cache: false,
+                url: self.bitfinexBTCETHtickerURL,
+                dataType: "json",
+                success: function (payload) {
+                    self.bitfinexETHBTClast(payload.last_price);
+                    self.bitfinexETHBTCbid(payload.bid);
+                    self.bitfinexETHBTClow(payload.low);
+                    self.bitfinexETHBTCvolume(parseFloat(payload.volume).toFixed(2));
+                    self.bitfinexETHBTCask(payload.ask);
+                    self.bitfinexETHBTChigh(payload.high);
 
                 }
             });

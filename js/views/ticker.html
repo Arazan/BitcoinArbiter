@@ -1,7 +1,9 @@
 <div class="oj-flex oj-sm-justify-content-center">
     <div class="oj-panel oj-flex-item oj-margin" style="width: 100%">
+        <h4 class="highlight" data-bind="text: 'Arbitrage Oportunity: $'+arbitrage()+' per btc'"></h4>
+        <h4 class="highlight" data-bind="text: 'Arbitrage Oportunity: $'+arbitrage2()+' per btc'"></h4>
     </div>
-    
+
     <div class="oj-panel oj-flex-item oj-margin" style="width: 23%">        
         <div class="oj-flex oj-sm-justify-content-center">
             <h2 class="oj-header-border" data-bind="text: '$'+bitsoBTClast()"></h2>
@@ -111,8 +113,7 @@
                 </div>
             </div>
         </div>
-    </div>    
-    
+    </div>        
     <div class="oj-panel oj-flex-item oj-margin" style="width: 23%">        
         <div class="oj-flex oj-sm-justify-content-center">
             <h2 class="oj-header-border" data-bind="text: '$'+bitfinexBTClast()"></h2>
@@ -222,5 +223,115 @@
                 </div>
             </div>
         </div>
-    </div>        
+    </div>    
+    <div class="oj-panel oj-flex-item oj-margin" style="width: 23%">        
+        <div class="oj-flex oj-sm-justify-content-center">
+            <h2 class="oj-header-border" data-bind="text: '$'+bitsoETHBTClast()"></h2>
+            <span style="width: 100%"></span>
+            <h4 class="highlight">Bitso ETH/BTC</h4>
+            <span style="width: 100%"></span>
+            <div class="oj-flex oj-sm-only-flex-direction-column oj-md-only-flex-direction-column oj-lg-flex-items-1 oj-form-layout" >
+                <div class="oj-flex-item">
+                    <div class="oj-form  oj-sm-odd-cols-12 oj-md-odd-cols-4">
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Bid</span>
+                                <span data-bind="text: '$'+bitsoETHBTCbid()"></span>
+                            </div>
+                        </div>
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Low</span>
+                                <span data-bind="text: '$'+bitsoETHBTClow()"></span>
+                            </div>
+                        </div>  
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Volume</span>
+                                <span data-bind="text: bitsoETHBTCvolume"></span>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+
+                <div class="oj-flex-item">
+                    <div class="oj-form  oj-sm-odd-cols-12 oj-md-odd-cols-4 oj-md-labels-inline">
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Ask</span>
+                                <span data-bind="text: '$'+bitsoETHBTCask()"></span>
+                            </div>
+                        </div>
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">High</span>
+                                <span data-bind="text: '$'+bitsoETHBTChigh()"></span>
+                            </div>
+                        </div>                        
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Spread</span>
+                                <span data-bind="text: bitsoETHBTCspread()+'%'"></span>
+                            </div>
+                        </div>                                                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <div class="oj-panel oj-flex-item oj-margin" style="width: 23%">        
+        <div class="oj-flex oj-sm-justify-content-center">
+            <h2 class="oj-header-border" data-bind="text: '$'+bitfinexETHBTClast()"></h2>
+            <span style="width: 100%"></span>
+            <h4 class="highlight">Bitfinex ETH/BTC</h4>
+            <span style="width: 100%"></span>
+            <div class="oj-flex oj-sm-only-flex-direction-column oj-md-only-flex-direction-column oj-lg-flex-items-1 oj-form-layout" >
+                <div class="oj-flex-item">
+                    <div class="oj-form  oj-sm-odd-cols-12 oj-md-odd-cols-4">
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Bid</span>
+                                <span data-bind="text: '$'+bitfinexETHBTCbid()"></span>
+                            </div>
+                        </div>
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Low</span>
+                                <span data-bind="text: '$'+bitfinexETHBTClow()"></span>
+                            </div>
+                        </div>  
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Volume</span>
+                                <span data-bind="text: bitfinexETHBTCvolume"></span>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+
+                <div class="oj-flex-item">
+                    <div class="oj-form  oj-sm-odd-cols-12 oj-md-odd-cols-4 oj-md-labels-inline">
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Ask</span>
+                                <span data-bind="text: '$'+bitfinexETHBTCask()"></span>
+                            </div>
+                        </div>
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">High</span>
+                                <span data-bind="text: '$'+bitfinexETHBTChigh()"></span>
+                            </div>
+                        </div>                        
+                        <div class="oj-flex">
+                            <div class="oj-flex-item">
+                                <span class="highlight">Spread</span>
+                                <span data-bind="text: bitfinexETHBTCspread()+'%'"></span>
+                            </div>
+                        </div>                                                
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>      
 </div>

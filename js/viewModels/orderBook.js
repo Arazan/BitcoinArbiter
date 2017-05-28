@@ -9,39 +9,39 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
     'ojs/ojinputnumber'],
         function (oj, ko, $, BitsoBTCOrderBook) {
 
-            function DashboardViewModel() {
+            function OrderBookViewModel() {
                 var self = this;
 
                 self.fetchSize = ko.observable(10);
                 self.usdTOmxnExchange = ko.observable();
                 self.refreshRate = 5;
-                                            
+
 
                 self.BitsoOBAsksDataSource = ko.observable();
                 self.BitsoOBBidsDataSource = ko.observable();
                 self.BitsoOrderBookAsks = ko.observableArray();
                 self.BitsoOrderBookBids = ko.observableArray();
-                
+
                 self.BitsoETHAsksDataSource = ko.observable();
                 self.BitsoETHBidsDataSource = ko.observable();
                 self.BitsoETHOrderBookAsks = ko.observableArray();
-                self.BitsoETHOrderBookBids = ko.observableArray();           
-                
+                self.BitsoETHOrderBookBids = ko.observableArray();
+
                 self.BitfinexOBAsksDataSource = ko.observable();
                 self.BitfinexOBBidsDataSource = ko.observable();
                 self.BitfinexOrderBookAsks = ko.observableArray();
                 self.BitfinexOrderBookBids = ko.observableArray();
-                
+
                 self.BitfinexETHAsksDataSource = ko.observable();
                 self.BitfinexETHBidsDataSource = ko.observable();
                 self.BitfinexETHOrderBookAsks = ko.observableArray();
-                self.BitfinexETHOrderBookBids = ko.observableArray();    
-                
+                self.BitfinexETHOrderBookBids = ko.observableArray();
+
                 self.BitsoBTCOrderBookURL = 'https://api.bitso.com/v3/order_book/?book=btc_mxn';
                 self.BitsoETHOrderBookURL = 'https://api.bitso.com/v3/order_book/?book=eth_mxn';
                 self.BFBTCOrderBookURL = 'https://api.bitfinex.com/v1/book/BTCUSD/?limit_bids=';
-                self.BFETHCOrderBookURL = 'https://api.bitfinex.com/v2/book/ETHUSD/?limit_bids=';
-                self.BFETHBTCCOrderBookURL = 'https://api.bitfinex.com/v2/book/ETHBTC/?limit_bids=';
+                self.BFETHCOrderBookURL = 'https://api.bitfinex.com/v1/book/ETHUSD/?limit_bids=';
+                self.BFETHBTCCOrderBookURL = 'https://api.bitfinex.com/v1/book/ETHBTC/?limit_bids=';
                 self.ExchangeRareURL = 'http://api.fixer.io/latest?base=USD&symbols=MXN';
 
                 /**
@@ -98,20 +98,19 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
                 };
 
 
-                self.getDataClick = function (data, event) {
-                    self.getData();
-                    return true;
-                };
-
-
                 self.getData = function () {
                     self.getBitsoBTCOrderBook();
                     self.getBitsoETHOrderBook();
-                    
+
                     self.getBitfinexBTCOrderBook();
                     self.getBitfinexETHCOrderBook();
-                    
+
                     self.getExchangeRate();
+
+                    setTimeout(function () {
+                        console.log("timer");
+                        self.getData();
+                    }, 12000);
                 };
 
                 self.getBitsoETHOrderBook = function () {
@@ -122,11 +121,11 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
                         success: function (orderBook) {
                             var ids = 0;
 
-                            
+
                             self.BitsoETHOrderBookAsks([]);
                             self.BitsoETHAsksDataSource.reset([]);
                             self.BitsoETHOrderBookBids([]);
-                            self.BitsoETHBidsDataSource.reset([]);                            
+                            self.BitsoETHBidsDataSource.reset([]);
 
                             $.each(orderBook.payload.asks, function () {
                                 self.BitsoETHOrderBookAsks.push({
@@ -156,7 +155,7 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
                     self.BitsoETHAsksDataSource = new oj.ArrayTableDataSource(self.BitsoETHOrderBookAsks, {idAttribute: 'id'});
                     self.BitsoETHBidsDataSource = new oj.ArrayTableDataSource(self.BitsoETHOrderBookBids, {idAttribute: 'id'});
                 };
-                
+
                 self.getBitsoBTCOrderBook = function () {
                     $.ajax({
                         cache: false,
@@ -165,11 +164,11 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
                         success: function (orderBook) {
                             var ids = 0;
 
-                            
+
                             self.BitsoOrderBookAsks([]);
                             self.BitsoOBAsksDataSource.reset([]);
                             self.BitsoOrderBookBids([]);
-                            self.BitsoOBBidsDataSource.reset([]);                            
+                            self.BitsoOBBidsDataSource.reset([]);
 
                             $.each(orderBook.payload.asks, function () {
                                 self.BitsoOrderBookAsks.push({
@@ -198,21 +197,21 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
 
                     self.BitsoOBAsksDataSource = new oj.ArrayTableDataSource(self.BitsoOrderBookAsks, {idAttribute: 'id'});
                     self.BitsoOBBidsDataSource = new oj.ArrayTableDataSource(self.BitsoOrderBookBids, {idAttribute: 'id'});
-                };        
-                
+                };
+
                 self.getBitfinexBTCOrderBook = function () {
                     $.ajax({
                         cache: false,
-                        url: self.BFBTCOrderBookURL+self.fetchSize()+'&limit_asks='+self.fetchSize(),
+                        url: self.BFBTCOrderBookURL + self.fetchSize() + '&limit_asks=' + self.fetchSize(),
                         dataType: "json",
                         success: function (orderBook) {
                             var ids = 0;
-                           
+
 
                             self.BitfinexOrderBookAsks([]);
                             self.BitfinexOBAsksDataSource.reset([]);
                             self.BitfinexOrderBookBids([]);
-                            self.BitfinexOBBidsDataSource.reset([]);                          
+                            self.BitfinexOBBidsDataSource.reset([]);
 
                             $.each(orderBook.asks, function () {
                                 self.BitfinexOrderBookAsks.push({
@@ -241,21 +240,21 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
 
                     self.BitfinexOBAsksDataSource = new oj.ArrayTableDataSource(self.BitfinexOrderBookAsks, {idAttribute: 'id'});
                     self.BitfinexOBBidsDataSource = new oj.ArrayTableDataSource(self.BitfinexOrderBookBids, {idAttribute: 'id'});
-                };     
-                
+                };
+
                 self.getBitfinexETHCOrderBook = function () {
                     $.ajax({
                         cache: false,
-                        url: self.BFETHCOrderBookURL+self.fetchSize()+'&limit_asks='+self.fetchSize(),
+                        url: self.BFETHCOrderBookURL + self.fetchSize() + '&limit_asks=' + self.fetchSize(),
                         dataType: "json",
                         success: function (orderBook) {
                             var ids = 0;
-                           
+
 
                             self.BitfinexETHOrderBookAsks([]);
                             self.BitfinexETHAsksDataSource.reset([]);
                             self.BitfinexETHOrderBookBids([]);
-                            self.BitfinexETHBidsDataSource.reset([]);                          
+                            self.BitfinexETHBidsDataSource.reset([]);
 
                             $.each(orderBook.asks, function () {
                                 self.BitfinexETHOrderBookAsks.push({
@@ -284,16 +283,16 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
 
                     self.BitfinexETHAsksDataSource = new oj.ArrayTableDataSource(self.BitfinexETHOrderBookAsks, {idAttribute: 'id'});
                     self.BitfinexETHBidsDataSource = new oj.ArrayTableDataSource(self.BitfinexETHOrderBookBids, {idAttribute: 'id'});
-                };     
-                
+                };
+
                 self.getBitfinexETHBTCPrice = function () {
                     $.ajax({
                         cache: false,
-                        url: self.BFETHBTCCOrderBookURL+self.fetchSize()+'&limit_asks='+self.fetchSize(),
+                        url: self.BFETHBTCCOrderBookURL + self.fetchSize() + '&limit_asks=' + self.fetchSize(),
                         dataType: "json",
                         success: function (orderBook) {
                             var ids = 0;
-                                                    
+
 
                             $.each(orderBook.asks, function () {
                                 self.BitfinexETHOrderBookAsks.push({
@@ -308,9 +307,9 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
                         }
                     });
 
-                };                 
-                
-                self.getExchangeRate = function(){
+                };
+
+                self.getExchangeRate = function () {
                     $.ajax({
                         url: self.ExchangeRareURL,
                         dataType: "json",
@@ -319,7 +318,7 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
                         }
                     });
                 };
-                
+
 
 
                 self.initialize = function () {
@@ -334,6 +333,6 @@ define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/
              * each time the view is displayed.  Return an instance of the ViewModel if
              * only one instance of the ViewModel is needed.
              */
-            return new DashboardViewModel();
+            return new OrderBookViewModel();
         }
 );
