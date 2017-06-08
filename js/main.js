@@ -51,22 +51,29 @@ requirejs.config(
          * by the modules themselves), we are listing them explicitly to get the references to the 'oj' and 'ko'
          * objects in the callback
          */
-        require(['ojs/ojcore', 'knockout', 'appController', 'ojs/ojknockout',
+        require(['ojs/ojcore', 'knockout', 'appController', 'libraries/Utilities', 'ojs/ojknockout',
             'ojs/ojmodule', 'ojs/ojrouter', 'ojs/ojnavigationlist', 'ojs/ojbutton', 'ojs/ojtoolbar'],
-                function (oj, ko, app) { // this callback gets executed when all required modules are loaded
+                function (oj, ko, app, util) { // this callback gets executed when all required modules are loaded
 
                     $(function () {
 
+                        var smQuery = oj.ResponsiveUtils.getFrameworkQuery(oj.ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
+                        self.smScreen = oj.ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
+
                         function init() {
 
-                            // Ask notification 
-                            if (!Notification) {
-                                alert('Desktop notifications not available in your browser. Try Chromium.');
-                                return;
+                            if (!util.isMobile) {
+                                console.log("ask");
+                                // Ask notification 
+                                if (!Notification) {
+                                    alert('Desktop notifications not available in your browser. Try Chromium.');
+                                    return;
+                                }
+
+                                if (Notification.permission !== "granted")
+                                    Notification.requestPermission();
                             }
 
-                            if (Notification.permission !== "granted")
-                                Notification.requestPermission();
 
 
                             oj.Router.sync().then(
@@ -79,6 +86,8 @@ requirejs.config(
                                     }
                             );
                         }
+
+
 
                         // If running in a hybrid (e.g. Cordova) environment, we need to wait for the deviceready 
                         // event before executing any code that might interact with Cordova APIs or plugins.

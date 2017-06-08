@@ -1,5 +1,5 @@
 <div class="oj-flex">
-    <div class="oj-flex-item oj-margin" style="min-width: 100%">
+    <div class="oj-flex-item oj-margin-start" style="width: 100%">
         <label for="fetchSize">Fetch Size</label> 
         <input id="fetchSize"
                data-bind="ojComponent: {
@@ -7,16 +7,19 @@
         max:25,
         min:1, 
         step:1, 
-        value:fetchSize}"/>     
+        value:fetchSize}"/> 
+    </div>
+    <div class="oj-flex-item oj-margin-start" style="width: 100%">
         <span>1 USD =</span>
         <span id="curr-value" data-bind="text: usdTOmxnExchange"></span>
         <span>MXN</span>
     </div>    
-    <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
+
+    <div class="oj-panel oj-flex-item oj-margin" style="width: 48%; min-width: 250px">        
         <h3 class="oj-header-border highlight">Bitso (MXN)</h3>
 
         <div class="oj-flex oj-sm-justify-content-center">
-            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+            <div class="oj-panel oj-flex-item oj-margin" style="width: 46%">
                 <h3>BTC Bids</h3>
                 <table  style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
@@ -28,7 +31,7 @@
         ]}">
                 </table>        
             </div>
-            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+            <div class="oj-panel oj-flex-item oj-margin" style="width: 46%">
                 <h3>BTC Asks</h3>
                 <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
@@ -44,10 +47,10 @@
 
         </div>
     </div>
-    <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
+    <div class="oj-panel oj-flex-item oj-margin" style="width: 48%; min-width: 250px">        
         <h3 class="oj-header-border highlight">Bitfinex (USD)</h3>
         <div class="oj-flex oj-sm-justify-content-center">
-            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+            <div class="oj-panel oj-flex-item oj-margin" style="width: 46%">
                 <h3>BTC Bids</h3>
                 <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
@@ -60,7 +63,7 @@
                 </table>        
             </div>
 
-            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+            <div class="oj-panel oj-flex-item oj-margin" style="width: 46%">
                 <h3>BTC Asks</h3>
                 <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
@@ -76,10 +79,10 @@
     </div>    
 
 
-    <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
+    <div class="oj-panel oj-flex-item oj-margin" style="width: 48%; min-width: 250px">        
         <h3 class="oj-header-border highlight">Bitso (MXN)</h3>
         <div class="oj-flex oj-sm-justify-content-center">
-            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+            <div class="oj-panel oj-flex-item oj-margin" style="width: 46%">
                 <h3>ETH Bids</h3>
                 <table  style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
@@ -91,7 +94,7 @@
         ]}">
                 </table>        
             </div>
-            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+            <div class="oj-panel oj-flex-item oj-margin" style="width: 46%">
                 <h3>ETH Asks</h3>
                 <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
@@ -107,10 +110,10 @@
 
         </div>
     </div>
-    <div class="oj-panel oj-flex-item oj-margin" style="max-width: 48%">
+    <div class="oj-panel oj-flex-item oj-margin" style="width: 48%; min-width: 250px">        
         <h3 class="oj-header-border highlight">Bitfinex (USD)</h3>
         <div class="oj-flex oj-sm-justify-content-center">
-            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+            <div class="oj-panel oj-flex-item oj-margin" style="width: 46%">
                 <h3>ETH Bids</h3>
                 <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 
@@ -122,7 +125,7 @@
         ]}">
                 </table>        
             </div>
-            <div class="oj-panel oj-flex-item oj-margin" style="max-width: 45%">
+            <div class="oj-panel oj-flex-item oj-margin" style="width: 46%">
                 <h3>ETH Asks</h3>
                 <table style="font-size: 12px" data-bind="ojComponent: {
     component: 'ojTable', 

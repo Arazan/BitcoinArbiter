@@ -7,8 +7,8 @@
 /**
  * ticker module
  */
-define(['ojs/ojcore', 'knockout'
-], function (oj, ko) {
+define(['ojs/ojcore', 'knockout', 'libraries/Utilities'
+], function (oj, ko, util) {
     /**
      * The view model for the main content view template
      */
@@ -18,6 +18,18 @@ define(['ojs/ojcore', 'knockout'
         var chanIdBTCUSD = 0;
         var chanIdETHUSD = 0;
         var chanIdETHBTC = 0;
+        
+        self.bitsoBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=btc_mxn';
+        self.bitsoETHtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_mxn';
+        self.bitsoETHBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_btc';
+
+        self.bitfinexBTCtickerURL = 'https://api.bitfinex.com/v1/pubticker/BTCUSD';
+        self.bitfinexETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHUSD';
+        self.bitfinexBTCETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHBTC';
+        self.refreshRate = 12000;
+        self.lastNotificationSent = 0;
+        self.notificationDelay = 600000;
+        self.arbitrageGap = 2000.00
 
 
         self.bitsoBTClast = ko.observable(0);
@@ -111,17 +123,7 @@ define(['ojs/ojcore', 'knockout'
             return arb;
         });
 
-        self.bitsoBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=btc_mxn';
-        self.bitsoETHtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_mxn';
-        self.bitsoETHBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_btc';
-
-        self.bitfinexBTCtickerURL = 'https://api.bitfinex.com/v1/pubticker/BTCUSD';
-        self.bitfinexETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHUSD';
-        self.bitfinexBTCETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHBTC';
-        self.refreshRate = 12000;
-        self.lastNotificationSent = 0;
-        self.notificationDelay = 600000;
-        self.arbitrageGap = 2000.00
+        
 
         self.handleActivated = function (info) {
             self.getData();
@@ -254,13 +256,15 @@ define(['ojs/ojcore', 'knockout'
         }
 
         self.sendNotification = function (arb) {
-            if (Notification.permission !== "granted")
-                Notification.requestPermission();
-            else {
-                var notification = new Notification('Bitcoin Arbiter', {
-                    icon: 'js/css/btc_512.png',
-                    body: "Arbitrage Oportunity of $ " + arb + " per btc"
-                });
+            if (!util.isMobile) {
+                if (Notification.permission !== "granted")
+                    Notification.requestPermission();
+                else {
+                    var notification = new Notification('Bitcoin Arbiter', {
+                        icon: 'js/css/btc_512.png',
+                        body: "Arbitrage Oportunity of $ " + arb + " per btc"
+                    });
+                }
             }
         };
 
