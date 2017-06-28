@@ -7,8 +7,8 @@
 /**
  * ticker module
  */
-define(['ojs/ojcore', 'knockout', 'libraries/Utilities'
-], function (oj, ko, util) {
+define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/etherminerModel'
+], function (oj, ko, util, miner) {
     /**
      * The view model for the main content view template
      */
@@ -18,7 +18,7 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities'
         var chanIdBTCUSD = 0;
         var chanIdETHUSD = 0;
         var chanIdETHBTC = 0;
-        
+                                
         self.bitsoBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=btc_mxn';
         self.bitsoETHtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_mxn';
         self.bitsoETHBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_btc';
@@ -256,7 +256,7 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities'
         }
 
         self.sendNotification = function (arb) {
-            if (!util.isMobile) {
+            if (!util.isMobile()) {
                 if (Notification.permission !== "granted")
                     Notification.requestPermission();
                 else {
