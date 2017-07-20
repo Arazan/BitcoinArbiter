@@ -7,22 +7,14 @@
 /**
  * ticker module
  */
-define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers',
-], function (oj, ko, util, bitso) {
+define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers', 'libraries/BitfinexTickers'
+], function (oj, ko, util, bitso, bitfinex) {
     /**
      * The view model for the main content view template
      */
     function tickerContentViewModel() {
         var self = this;
-        var wsUri = "wss://api.bitfinex.com/ws";
-        var chanIdBTCUSD = 0;
-        var chanIdETHUSD = 0;
-        var chanIdETHBTC = 0;
 
-
-        self.bitfinexBTCtickerURL = 'https://api.bitfinex.com/v1/pubticker/BTCUSD';
-        self.bitfinexETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHUSD';
-        self.bitfinexBTCETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHBTC';
         self.refreshRate = 12000;
         self.lastNotificationSent = 0;
         self.notificationDelay = 600000;
@@ -88,7 +80,6 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
         self.bitfinexETHBTCask = ko.observable(0);
         self.bitfinexETHBTChigh = ko.observable(0);
         self.bitfinexETHBTCspread = ko.pureComputed(function () {
-            //console.log()
             return parseFloat((((self.bitfinexETHBTCask() / self.bitfinexETHBTCbid())) - 1) * 100).toFixed(2);
         });
 
@@ -102,7 +93,6 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
                     self.sendNotification(arb);
                 }
             }
-
 
             return arb;
         });
@@ -153,6 +143,36 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
 
         });
 
+        bitfinex.tickers.subscribe(function (payload) {
+
+            if (payload.BTC != undefined) {
+                self.bitfinexBTClast(payload.BTC.last);
+                self.bitfinexBTCbid(payload.BTC.bid);
+                self.bitfinexBTClow(payload.BTC.low);
+                self.bitfinexBTCvolume(parseFloat(payload.BTC.volume).toFixed(2));
+                self.bitfinexBTCask(payload.BTC.ask);
+                self.bitfinexBTChigh(payload.BTC.high);
+            }
+
+            if (payload.ETH != undefined) {
+                self.bitfinexETHlast(payload.ETH.last);
+                self.bitfinexETHbid(payload.ETH.bid);
+                self.bitfinexETHlow(payload.ETH.low);
+                self.bitfinexETHvolume(parseFloat(payload.ETH.volume).toFixed(2));
+                self.bitfinexETHask(payload.ETH.ask);
+                self.bitfinexETHhigh(payload.ETH.high);
+            }
+
+            if (payload.ETHBTC != undefined) {
+                self.bitfinexETHBTClast(payload.ETHBTC.last);
+                self.bitfinexETHBTCbid(payload.ETHBTC.bid);
+                self.bitfinexETHBTClow(payload.ETHBTC.low);
+                self.bitfinexETHBTCvolume(parseFloat(payload.ETHBTC.volume).toFixed(2));
+                self.bitfinexETHBTCask(payload.ETHBTC.ask);
+                self.bitfinexETHBTChigh(payload.ETHBTC.high);
+            }
+        });
+
 
         self.handleActivated = function (info) {
             self.getData();
@@ -187,95 +207,8 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
             }
         };
 
+        bitfinex.connectToServer();
 
-        self.connectToServer = function () {
-            console.log("Connect to Server");
-            websocket = new WebSocket(wsUri);
-            websocket.onopen = function (evt) {
-                self.onOpen(evt)
-            };
-            websocket.onclose = function (evt) {
-                self.onClose(evt)
-            };
-            websocket.onmessage = function (evt) {
-                self.onMessage(evt)
-            };
-            websocket.onerror = function (evt) {
-                self.onError(evt)
-            };
-        };
-
-        self.onOpen = function (evt) {
-            console.log("Connected");
-            websocket.send('{"event":"subscribe","channel":"ticker","pair":"BTCUSD"}');
-            websocket.send('{"event":"subscribe","channel":"ticker","pair":"ETHUSD"}');
-            websocket.send('{"event":"subscribe","channel":"ticker","pair":"ETHBTC"}');
-        };
-
-        self.onClose = function (evt) {
-            console.log("Disconnected");
-        };
-
-        self.onMessage = function (evt) {
-            var data = JSON.parse(evt.data);
-            if (data.event == 'subscribed') {
-                switch (data.pair) {
-                    case 'BTCUSD':
-                        console.log('subscribed to BTCUSD');
-                        chanIdBTCUSD = data.chanId;
-                        break;
-                    case 'ETHUSD':
-                        console.log('subscribed to ETHUSD');
-                        chanIdETHUSD = data.chanId;
-                        break;
-                    case 'ETHBTC':
-                        console.log('subscribed to ETHBTC');
-                        chanIdETHBTC = data.chanId;
-                        break;
-                }
-            }
-
-            if (data[1] != 'hb') {
-                switch (data[0]) {
-                    case chanIdBTCUSD:
-                        self.bitfinexBTClast(parseFloat(data[7]).toFixed(2));
-                        self.bitfinexBTCbid(data[1]);
-                        self.bitfinexBTClow(data[10]);
-                        self.bitfinexBTCvolume(parseFloat(data[8]).toFixed(2));
-                        self.bitfinexBTCask(data[3]);
-                        self.bitfinexBTChigh(data[9]);
-                        break;
-                    case chanIdETHUSD:
-                        self.bitfinexETHlast(parseFloat(data[7]).toFixed(2));
-                        self.bitfinexETHbid(data[1]);
-                        self.bitfinexETHlow(data[10]);
-                        self.bitfinexETHvolume(parseFloat(data[8]).toFixed(2));
-                        self.bitfinexETHask(data[3]);
-                        self.bitfinexETHhigh(data[9]);
-                        break;
-                    case chanIdETHBTC:
-                        self.bitfinexETHBTClast(data[7]);
-                        self.bitfinexETHBTCbid(data[1]);
-                        self.bitfinexETHBTClow(data[10]);
-                        self.bitfinexETHBTCvolume(parseFloat(data[8]).toFixed(2));
-                        self.bitfinexETHBTCask(data[3]);
-                        self.bitfinexETHBTChigh(data[9]);
-                        break;
-                }
-            }
-
-        };
-
-        self.onError = function (evt) {
-            console.log("ERROR: " + evt.data);
-        };
-
-
-
-
-
-        //Connect to bitfinex via websockets
-        //self.connectToServer();
     }
 
     return tickerContentViewModel;

@@ -17,5 +17,3 @@ define(['ojs/ojcore', 'knockout'
     ;
     return BitsoBTCOrderBook;
 });
-
-
