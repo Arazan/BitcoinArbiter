@@ -89,36 +89,12 @@ define(['ojs/ojcore', 'knockout'
                 switch (data[0]) {
                     case self.chanIdBTCUSD:
                         self.savePayload(data, 'BTC');
-                        /*
-                         self.bitfinexBTClast(parseFloat(data[7]).toFixed(2));
-                         self.bitfinexBTCbid(data[1]);
-                         self.bitfinexBTClow(data[10]);
-                         self.bitfinexBTCvolume(parseFloat(data[8]).toFixed(2));
-                         self.bitfinexBTCask(data[3]);
-                         self.bitfinexBTChigh(data[9]);
-                         */
                         break;
                     case self.chanIdETHUSD:
                         self.savePayload(data, 'ETH');
-                        /*
-                         self.bitfinexETHlast(parseFloat(data[7]).toFixed(2));
-                         self.bitfinexETHbid(data[1]);
-                         self.bitfinexETHlow(data[10]);
-                         self.bitfinexETHvolume(parseFloat(data[8]).toFixed(2));
-                         self.bitfinexETHask(data[3]);
-                         self.bitfinexETHhigh(data[9]);
-                         */
                         break;
                     case self.chanIdETHBTC:
                         self.savePayload(data, 'ETHBTC');
-                        /*
-                         self.bitfinexETHBTClast(data[7]);
-                         self.bitfinexETHBTCbid(data[1]);
-                         self.bitfinexETHBTClow(data[10]);
-                         self.bitfinexETHBTCvolume(parseFloat(data[8]).toFixed(2));
-                         self.bitfinexETHBTCask(data[3]);
-                         self.bitfinexETHBTChigh(data[9]);
-                         */
                         break;
                 }
             }
