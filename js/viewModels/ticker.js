@@ -7,8 +7,8 @@
 /**
  * ticker module
  */
-define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/etherminerModel'
-], function (oj, ko, util, miner) {
+define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers',
+], function (oj, ko, util, bitso) {
     /**
      * The view model for the main content view template
      */
@@ -18,10 +18,7 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/etherminerMo
         var chanIdBTCUSD = 0;
         var chanIdETHUSD = 0;
         var chanIdETHBTC = 0;
-                                
-        self.bitsoBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=btc_mxn';
-        self.bitsoETHtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_mxn';
-        self.bitsoETHBTCtickerURL = 'https://api.bitso.com/v3/ticker/?book=eth_btc';
+
 
         self.bitfinexBTCtickerURL = 'https://api.bitfinex.com/v1/pubticker/BTCUSD';
         self.bitfinexETHtickerURL = 'https://api.bitfinex.com/v1/pubticker/ETHUSD';
@@ -123,7 +120,39 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/etherminerMo
             return arb;
         });
 
-        
+
+        // Get latest values from bitso
+        bitso.tickers.subscribe(function (payload) {
+
+            if (payload.BTC != undefined) {
+                self.bitsoBTClast(payload.BTC.last);
+                self.bitsoBTCbid(payload.BTC.bid);
+                self.bitsoBTClow(payload.BTC.low);
+                self.bitsoBTCvolume(parseFloat(payload.BTC.volume).toFixed(2));
+                self.bitsoBTCask(payload.BTC.ask);
+                self.bitsoBTChigh(payload.BTC.high);
+            }
+
+            if (payload.ETH != undefined) {
+                self.bitsoETHlast(payload.ETH.last);
+                self.bitsoETHbid(payload.ETH.bid);
+                self.bitsoETHlow(payload.ETH.low);
+                self.bitsoETHvolume(parseFloat(payload.ETH.volume).toFixed(2));
+                self.bitsoETHask(payload.ETH.ask);
+                self.bitsoETHhigh(payload.ETH.high);
+            }
+
+            if (payload.ETHBTC) {
+                self.bitsoETHBTClast(payload.ETHBTC.last);
+                self.bitsoETHBTCbid(payload.ETHBTC.bid);
+                self.bitsoETHBTClow(payload.ETHBTC.low);
+                self.bitsoETHBTCvolume(parseFloat(payload.ETHBTC.volume).toFixed(2));
+                self.bitsoETHBTCask(payload.ETHBTC.ask);
+                self.bitsoETHBTChigh(payload.ETHBTC.high);
+            }
+
+        });
+
 
         self.handleActivated = function (info) {
             self.getData();
@@ -134,126 +163,16 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/etherminerMo
         };
 
         self.getData = function () {
-            self.getBitsoBTCticker();
-            self.getBitsoETHticker();
-            self.getBitsoETHBTCticker();
-            //self.getBitfinexBTCticker();
-            //self.getBitfinexETHticker();
-            //self.getBitfinexETHBTCticker();
 
+            bitso.getTickers();
             setTimeout(function () {
                 self.getData();
             }, self.refreshRate);
 
+
         }
 
 
-
-
-        self.getBitsoBTCticker = function () {
-            $.ajax({
-                cache: false,
-                url: self.bitsoBTCtickerURL,
-                dataType: "json",
-                success: function (data) {
-                    var payload = data.payload;
-                    self.bitsoBTClast(payload.last);
-                    self.bitsoBTCbid(payload.bid);
-                    self.bitsoBTClow(payload.low);
-                    self.bitsoBTCvolume(parseFloat(payload.volume).toFixed(2));
-                    self.bitsoBTCask(payload.ask);
-                    self.bitsoBTChigh(payload.high);
-
-                }
-            });
-        }
-
-        self.getBitsoETHticker = function () {
-            $.ajax({
-                cache: false,
-                url: self.bitsoETHtickerURL,
-                dataType: "json",
-                success: function (data) {
-                    var payload = data.payload;
-                    self.bitsoETHlast(payload.last);
-                    self.bitsoETHbid(payload.bid);
-                    self.bitsoETHlow(payload.low);
-                    self.bitsoETHvolume(parseFloat(payload.volume).toFixed(2));
-                    self.bitsoETHask(payload.ask);
-                    self.bitsoETHhigh(payload.high);
-
-                }
-            });
-        }
-
-        self.getBitsoETHBTCticker = function () {
-            $.ajax({
-                cache: false,
-                url: self.bitsoETHBTCtickerURL,
-                dataType: "json",
-                success: function (data) {
-                    var payload = data.payload;
-                    self.bitsoETHBTClast(payload.last);
-                    self.bitsoETHBTCbid(payload.bid);
-                    self.bitsoETHBTClow(payload.low);
-                    self.bitsoETHBTCvolume(parseFloat(payload.volume).toFixed(2));
-                    self.bitsoETHBTCask(payload.ask);
-                    self.bitsoETHBTChigh(payload.high);
-
-                }
-            });
-        }
-
-        self.getBitfinexBTCticker = function () {
-            $.ajax({
-                cache: false,
-                url: self.bitfinexBTCtickerURL,
-                dataType: "json",
-                success: function (payload) {
-                    self.bitfinexBTClast(payload.last_price);
-                    self.bitfinexBTCbid(payload.bid);
-                    self.bitfinexBTClow(payload.low);
-                    self.bitfinexBTCvolume(parseFloat(payload.volume).toFixed(2));
-                    self.bitfinexBTCask(payload.ask);
-                    self.bitfinexBTChigh(payload.high);
-
-                }
-            });
-        }
-
-        self.getBitfinexETHticker = function () {
-            $.ajax({
-                cache: false,
-                url: self.bitfinexETHtickerURL,
-                dataType: "json",
-                success: function (payload) {
-                    self.bitfinexETHlast(payload.last_price);
-                    self.bitfinexETHbid(payload.bid);
-                    self.bitfinexETHlow(payload.low);
-                    self.bitfinexETHvolume(parseFloat(payload.volume).toFixed(2));
-                    self.bitfinexETHask(payload.ask);
-                    self.bitfinexETHhigh(payload.high);
-
-                }
-            });
-        }
-
-        self.getBitfinexETHBTCticker = function () {
-            $.ajax({
-                cache: false,
-                url: self.bitfinexBTCETHtickerURL,
-                dataType: "json",
-                success: function (payload) {
-                    self.bitfinexETHBTClast(payload.last_price);
-                    self.bitfinexETHBTCbid(payload.bid);
-                    self.bitfinexETHBTClow(payload.low);
-                    self.bitfinexETHBTCvolume(parseFloat(payload.volume).toFixed(2));
-                    self.bitfinexETHBTCask(payload.ask);
-                    self.bitfinexETHBTChigh(payload.high);
-
-                }
-            });
-        }
 
         self.sendNotification = function (arb) {
             if (!util.isMobile()) {
@@ -356,7 +275,7 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/etherminerMo
 
 
         //Connect to bitfinex via websockets
-        self.connectToServer();
+        //self.connectToServer();
     }
 
     return tickerContentViewModel;
