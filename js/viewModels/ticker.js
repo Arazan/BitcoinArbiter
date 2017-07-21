@@ -7,18 +7,19 @@
 /**
  * ticker module
  */
-define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers', 'libraries/BitfinexTickers'
-], function (oj, ko, util, bitso, bitfinex) {
+define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers', 'libraries/BitfinexTickers', 'libraries/PoloniexTickers'
+], function (oj, ko, util, bitso, bitfinex, poloniex) {
     /**
      * The view model for the main content view template
      */
     function tickerContentViewModel() {
         var self = this;
+        var empty = {last: "0", bid: "0", low: "0", volume: "0", ask: "0", high: "0", spread: "0"};
 
         self.refreshRate = 12000;
         self.lastNotificationSent = 0;
         self.notificationDelay = 600000;
-        self.arbitrageGap = 2000.00
+        self.arbitrageGap = 2000.00;
 
 
         self.bitsoBTClast = ko.observable(0);
@@ -83,6 +84,10 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
             return parseFloat((((self.bitfinexETHBTCask() / self.bitfinexETHBTCbid())) - 1) * 100).toFixed(2);
         });
 
+        self.poloniexBTC = ko.observable(empty);
+        self.poloniexETH = ko.observable(empty);
+        self.poloniexETHBTC = ko.observable(empty);
+
 
         self.arbitrage = ko.pureComputed(function () {
             var arb = parseFloat(((self.bitfinexBTCbid() / self.bitfinexETHask()) * self.bitsoETHbid()) - self.bitsoBTCask()).toFixed(2);
@@ -114,7 +119,7 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
         // Get latest values from bitso
         bitso.tickers.subscribe(function (payload) {
 
-            if (payload.BTC != undefined) {
+            if (payload.BTC !== undefined) {
                 self.bitsoBTClast(payload.BTC.last);
                 self.bitsoBTCbid(payload.BTC.bid);
                 self.bitsoBTClow(payload.BTC.low);
@@ -123,7 +128,7 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
                 self.bitsoBTChigh(payload.BTC.high);
             }
 
-            if (payload.ETH != undefined) {
+            if (payload.ETH !== undefined) {
                 self.bitsoETHlast(payload.ETH.last);
                 self.bitsoETHbid(payload.ETH.bid);
                 self.bitsoETHlow(payload.ETH.low);
@@ -143,9 +148,10 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
 
         });
 
+        // Get latest values from bitfinex
         bitfinex.tickers.subscribe(function (payload) {
 
-            if (payload.BTC != undefined) {
+            if (payload.BTC !== undefined) {
                 self.bitfinexBTClast(payload.BTC.last);
                 self.bitfinexBTCbid(payload.BTC.bid);
                 self.bitfinexBTClow(payload.BTC.low);
@@ -154,7 +160,7 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
                 self.bitfinexBTChigh(payload.BTC.high);
             }
 
-            if (payload.ETH != undefined) {
+            if (payload.ETH !== undefined) {
                 self.bitfinexETHlast(payload.ETH.last);
                 self.bitfinexETHbid(payload.ETH.bid);
                 self.bitfinexETHlow(payload.ETH.low);
@@ -163,13 +169,28 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
                 self.bitfinexETHhigh(payload.ETH.high);
             }
 
-            if (payload.ETHBTC != undefined) {
+            if (payload.ETHBTC !== undefined) {
                 self.bitfinexETHBTClast(payload.ETHBTC.last);
                 self.bitfinexETHBTCbid(payload.ETHBTC.bid);
                 self.bitfinexETHBTClow(payload.ETHBTC.low);
                 self.bitfinexETHBTCvolume(parseFloat(payload.ETHBTC.volume).toFixed(2));
                 self.bitfinexETHBTCask(payload.ETHBTC.ask);
                 self.bitfinexETHBTChigh(payload.ETHBTC.high);
+            }
+        });
+
+        // Get latest values from POLONIEX
+        poloniex.tickers.subscribe(function (payload) {
+            if (payload.BTC != undefined) {
+                self.poloniexBTC(payload.BTC);
+            }
+
+            if (payload.ETH != undefined) {
+                self.poloniexETH(payload.ETH);
+            }
+
+            if (payload.ETHBTC != undefined) {
+                self.poloniexETHBTC(payload.ETHBTC);
             }
         });
 
@@ -193,7 +214,6 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
         }
 
 
-
         self.sendNotification = function (arb) {
             if (!util.isMobile()) {
                 if (Notification.permission !== "granted")
@@ -207,7 +227,9 @@ define(['ojs/ojcore', 'knockout', 'libraries/Utilities', 'libraries/BitsoTickers
             }
         };
 
+        //Connect to Web sockets APIs
         bitfinex.connectToServer();
+        poloniex.connectToServer();
 
     }
 

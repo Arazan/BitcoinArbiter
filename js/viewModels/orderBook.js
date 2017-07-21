@@ -5,9 +5,9 @@
 /*
  * Your dashboard ViewModel code goes here
  */
-define(['ojs/ojcore', 'knockout', 'jquery', 'libraries/BitsoBTCOrderBook', 'ojs/ojmodel', 'ojs/ojbutton', 'ojs/ojtable', 'ojs/ojcollectiontabledatasource',
+define(['ojs/ojcore', 'knockout', 'jquery', 'ojs/ojmodel', 'ojs/ojbutton', 'ojs/ojtable', 'ojs/ojcollectiontabledatasource',
     'ojs/ojinputnumber'],
-        function (oj, ko, $, BitsoBTCOrderBook) {
+        function (oj, ko, $) {
 
             function OrderBookViewModel() {
                 var self = this;
